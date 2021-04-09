@@ -1,0 +1,8 @@
+{
+    "require": {
+        "addwiki/mediawiki-api-base": "~3.0@dev",
+        "atymic/twitter": "^3.0",
+        "vlucas/phpdotenv": "^5.3",
+        "guzzlehttp/guzzle": "^7.3"
+    }
+}
