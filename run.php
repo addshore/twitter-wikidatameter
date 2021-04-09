@@ -5,6 +5,7 @@ use Addwiki\Mediawiki\Api\Client\MediaWiki;
 use Atymic\Twitter\Twitter;
 use Atymic\Twitter\Configuration as TwitterConf;
 use GuzzleHttp\Client as Guzzle;
+use NumberToWords\NumberToWords;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -20,6 +21,7 @@ $tw = new Twitter(
 );
 $store = new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
 $wd = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' )->action();
+$numberToWords = (new NumberToWords())->getNumberTransformer('en');
 
 // Load our existing state
 $storeGet = $store->request('GET');
@@ -44,8 +46,10 @@ $toPost = [];
 if ( intdiv($wdEdits, 1000000) > intdiv($data['wdEdits'], 1000000) ) {
     $roundNumber = floor($wdEdits/1000000)*1000000;
     $formatted = number_format($roundNumber);
+    $words = $numberToWords->toWords($roundNumber);
     $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} edits!
+    Wikidata now has ${formatted} edits!
+    That's over ${words}...
     You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${roundNumber}
     TWEET;
     $data['wdEdits'] = $wdEdits;
