@@ -3,7 +3,13 @@
 I'm the code, and deployment of Twitter bot [WikidataMeter](https://twitter.com/WikidataMeter).
 I tweet a few fun things about Wikidata as it grows.
 
-- Everytime another 1,000,000 edits happens.
+## Tweets
+
+Feel free to suggest more tweets by creating an Github issue.
+
+Everytime another **1,000,000 edits** happens
+
+![](https://i.imgur.com/Nr9MSVQ.png)
 
 ## Development
 
@@ -36,14 +42,14 @@ docker build . -t twitter-wikidatameter
 
 Services:
 
-- [Github Actions](https://github.com/features/actions)
-- [Wikidata](https://www.wikidata.org)
-- [JSONStorage.net](https://www.jsonstorage.net/)
-- [Twitter](https://www.twitter.com)
+- [Github Actions](https://github.com/features/actions) - Building Docker images & running the cron for the bot
+- [Wikidata](https://www.wikidata.org) - Getting the data
+- [JSONStorage.net](https://www.jsonstorage.net/) - Some persistence between runs
+- [Twitter](https://www.twitter.com) - For publishing the tweets
 
 Libraries:
 
-- [addwiki/mediawiki-api-base](https://github.com/addwiki/mediawiki-api-base)
-- [atymic/twitter](https://github.com/atymic/twitter)
-- [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv)
-- [guzzlehttp/guzzle](https://github.com/guzzle/guzzle)
+- [addwiki/mediawiki-api-base](https://github.com/addwiki/mediawiki-api-base) - Talking to the Wikidata API
+- [atymic/twitter](https://github.com/atymic/twitter) - Talking to the Twitter API
+- [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - Reading env vars from a .env file
+- [guzzlehttp/guzzle](https://github.com/guzzle/guzzle) - Talking to the JSONStorage.net API
