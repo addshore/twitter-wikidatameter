@@ -2,6 +2,12 @@
 
 README coming soon :)
 
+## Building container
+
+```sh
+docker build . -t twitter-wikidatameter
+```
+
 ## Makes use of
 
 Services:
