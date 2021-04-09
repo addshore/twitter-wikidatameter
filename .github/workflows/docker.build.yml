@@ -1,5 +1,5 @@
 # Modified version of https://github.com/actions/starter-workflows/blob/d9236ebe5585b1efd5732a29ea126807279ccd56/ci/docker-publish.yml
-name: Docker
+name: Docker Build
 
 on:
   push:

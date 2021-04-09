@@ -1,8 +1,32 @@
 # Twitter WikidataMeter Bot
 
-README coming soon :)
+I'm the code, and deployment of Twitter bot [WikidataMeter](https://twitter.com/WikidataMeter).
+I tweet a few fun things about Wikidata as it grows.
 
-## Building container
+- Everytime another 1,000,000 edits happens.
+
+## Development
+
+You'll need to install my dependencies using composer.
+
+```sh
+composer install
+```
+
+And in order to fully integrate with the services you'll need to populate a `.env` file.
+Checkout `.env.example` for what is needed.
+
+Then just run the main script.
+
+```sh
+php run.php
+```
+
+## Deployment
+
+I run on Github Actions on a cron using a docker container.
+
+You can build the docker container using the following.
 
 ```sh
 docker build . -t twitter-wikidatameter

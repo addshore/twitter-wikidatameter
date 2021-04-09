@@ -8,9 +8,9 @@ use GuzzleHttp\Client as Guzzle;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Load Environment
+// Load Environment from a file (only if it exists)
 $dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
-$dotenv->load();
+$dotenv->safeLoad();
 
 // Service Objects
 $tw = new Twitter(

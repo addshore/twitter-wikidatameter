@@ -9,8 +9,8 @@ RUN composer install --ignore-platform-reqs
 FROM php:7.4
 
 WORKDIR /app/
-COPY . ./
-COPY --from=composer /app/vendor /appvendor
+COPY . /app
+COPY --from=composer /app/vendor /app/vendor
 
 ENTRYPOINT [ "php" ]
 CMD [ "run.php" ]

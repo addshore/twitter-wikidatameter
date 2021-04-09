@@ -23,6 +23,9 @@ jobs:
         envkey_TWITTER_USER: ${{ secrets.TWITTER_USER }}
         file_name: .env
 
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
     - name: Pull the bot image
       run: docker pull docker.pkg.github.com/addshore/twitter-wikidatameter/bot:latest
 
