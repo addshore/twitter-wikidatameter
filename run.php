@@ -41,10 +41,13 @@ $data['wdEdits'] = array_key_exists('wdEdits',$data) ? $data['wdEdits'] : $wdEdi
 // Figure out if we need to make a new tweet
 $toPost = [];
 // wdEdits
-if ( intdiv($data['wdEdits'], 1000000) > intdiv($wdEdits, 1000000) ) {
+if ( intdiv($wdEdits, 1000000) > intdiv($data['wdEdits'], 1000000) ) {
     $roundNumber = floor($wdEdits/1000000)*1000000;
     $formatted = number_format($roundNumber);
-    $toPost[] = "Wikidata just reached the next 1 million edit mark.\nNow with over ${$formatted} edits.\nhttps://www.wikidata.org/w/index.php?diff=${$roundNumber}";
+    $toPost[] = <<<TWEET
+    Wikidata now has over ${formatted} edits!
+    You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${roundNumber}
+    TWEET;
     $data['wdEdits'] = $wdEdits;
 }
 
@@ -55,7 +58,7 @@ foreach( $toPost as $tweetText ) {
     //     continue;
     // }
 
-    echo "Tweeting: ${$tweetText}" . PHP_EOL;
+    echo "Tweeting: ${tweetText}" . PHP_EOL;
     $a = $tw->postTweet([
         'status' => $tweetText
     ]);
