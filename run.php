@@ -2,8 +2,10 @@
 
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\MediaWiki;
-use Atymic\Twitter\Twitter;
+use Atymic\Twitter\ApiV1\Service\Twitter;
 use Atymic\Twitter\Configuration as TwitterConf;
+use Atymic\Twitter\Http\Factory\ClientCreator as TwitterClientCreator;
+use Atymic\Twitter\Service\Querier as TwitterQuerier;
 use GuzzleHttp\Client as Guzzle;
 use NumberToWords\NumberToWords;
 
@@ -15,9 +17,12 @@ $dotenv->safeLoad();
 
 // Service Objects
 $tw = new Twitter(
-    TwitterConf::fromLaravelConfiguration(
-        require_once __DIR__ . '/vendor/atymic/twitter/config/twitter.php'
-        )
+    new TwitterQuerier(
+        TwitterConf::createFromConfig(
+            require_once __DIR__ . '/vendor/atymic/twitter/config/twitter.php'
+        ),
+        new TwitterClientCreator()
+    )
 );
 $store = new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
 $wd = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' )->action();
