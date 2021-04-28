@@ -65,16 +65,16 @@
         },
         {
             "name": "atymic/twitter",
-            "version": "3.1.5",
+            "version": "3.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atymic/twitter.git",
-                "reference": "b45e4bcc7cb9d30d8f8167b084911e24b160d0b1"
+                "reference": "738a2b58775b9f59765c332fa20b9f40ad530167"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atymic/twitter/zipball/b45e4bcc7cb9d30d8f8167b084911e24b160d0b1",
-                "reference": "b45e4bcc7cb9d30d8f8167b084911e24b160d0b1",
+                "url": "https://api.github.com/repos/atymic/twitter/zipball/738a2b58775b9f59765c332fa20b9f40ad530167",
+                "reference": "738a2b58775b9f59765c332fa20b9f40ad530167",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +146,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-18T21:58:53+00:00"
+            "time": "2021-04-27T20:45:03+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -618,16 +618,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.37.0",
+            "version": "v8.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "591e31015a8b0731708c54411cb52d50a00b2bc3"
+                "reference": "deccb956d38710f3f8baf36dd876c3fa1585ec22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/591e31015a8b0731708c54411cb52d50a00b2bc3",
-                "reference": "591e31015a8b0731708c54411cb52d50a00b2bc3",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/deccb956d38710f3f8baf36dd876c3fa1585ec22",
+                "reference": "deccb956d38710f3f8baf36dd876c3fa1585ec22",
                 "shasum": ""
             },
             "require": {
@@ -664,20 +664,20 @@
             ],
             "description": "The Illuminate Collections package.",
             "homepage": "https://laravel.com",
-            "time": "2021-04-01T13:26:52+00:00"
+            "time": "2021-04-22T21:08:09+00:00"
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.37.0",
+            "version": "v8.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "5764f703ea8f74ced163125d810951cd5ef2b7e1"
+                "reference": "5152041a5c4ac4dbebb3c8ee72d05666c592ae08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/5764f703ea8f74ced163125d810951cd5ef2b7e1",
-                "reference": "5764f703ea8f74ced163125d810951cd5ef2b7e1",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/5152041a5c4ac4dbebb3c8ee72d05666c592ae08",
+                "reference": "5152041a5c4ac4dbebb3c8ee72d05666c592ae08",
                 "shasum": ""
             },
             "require": {
@@ -708,11 +708,11 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2021-04-01T13:09:31+00:00"
+            "time": "2021-04-23T13:31:10+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.37.0",
+            "version": "v8.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -754,16 +754,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.37.0",
+            "version": "v8.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "074a9b7adefcdd7108e19faa96bc9dacfe922062"
+                "reference": "366454ee39a803f1bdeabc7c79fbb973c101c026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/074a9b7adefcdd7108e19faa96bc9dacfe922062",
-                "reference": "074a9b7adefcdd7108e19faa96bc9dacfe922062",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/366454ee39a803f1bdeabc7c79fbb973c101c026",
+                "reference": "366454ee39a803f1bdeabc7c79fbb973c101c026",
                 "shasum": ""
             },
             "require": {
@@ -814,7 +814,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2021-04-11T23:26:41+00:00"
+            "time": "2021-04-27T12:57:43+00:00"
         },
         {
             "name": "kamermans/guzzle-oauth2-subscriber",
@@ -1275,16 +1275,16 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "6.3.1",
+            "version": "6.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "78278800b18e7c5582fd4d4e629715f5eebbfcc0"
+                "reference": "12a15cc288bbc89896dd80ce5a36731781613ba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/78278800b18e7c5582fd4d4e629715f5eebbfcc0",
-                "reference": "78278800b18e7c5582fd4d4e629715f5eebbfcc0",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/12a15cc288bbc89896dd80ce5a36731781613ba2",
+                "reference": "12a15cc288bbc89896dd80ce5a36731781613ba2",
                 "shasum": ""
             },
             "require": {
@@ -1343,7 +1343,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-25T10:29:47+00:00"
+            "time": "2021-04-20T12:24:31+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",
