@@ -6,7 +6,7 @@ COPY composer.* ./
 RUN composer install --ignore-platform-reqs
 
 
-FROM php:8.0.6
+FROM php:8.0.7
 
 WORKDIR /app/
 COPY . /app
