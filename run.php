@@ -113,20 +113,21 @@ if ( intdiv($wdNsPages[146], 10000) > intdiv($data['wdNsPages146'], 10000) ) {
     $data['wdNsPages146'] = $wdNsPages[146];
 }
 
-// Possibly make a new tweet
+// Persist any changed state
+// Do this before we tweet, incase it fails (then we will simply retry on the next run)
+if( $dataHash !== md5(serialize($data)) ){
+    echo "Persisting changed state." . PHP_EOL;
+    var_dump($data);
+    $store->request('PUT', '', [ 'body' => json_encode( $data ), 'headers' => [ 'content-type' => 'application/json; charset=utf-8' ] ]);
+}
+
+// Make new tweets
 foreach( $toPost as $tweetText ) {
     echo "Tweeting: ${tweetText}" . PHP_EOL;
     $a = $tw->postTweet([
         'status' => $tweetText
     ]);
     sleep(2);
-}
-
-// Persist any changed state
-if( $dataHash !== md5(serialize($data)) ){
-    echo "Persisting changed state." . PHP_EOL;
-    var_dump($data);
-    $store->request('PUT', '', [ 'body' => json_encode( $data ), 'headers' => [ 'content-type' => 'application/json; charset=utf-8' ] ]);
 }
 
 // All done!
