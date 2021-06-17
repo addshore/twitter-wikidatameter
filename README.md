@@ -7,9 +7,29 @@ I tweet a few fun things about Wikidata as it grows.
 
 Feel free to suggest more tweets by creating an Github issue.
 
-Everytime another **1,000,000 edits** happens
+### Everytime another 1,000,000 edits happens
+
+Bot checks this data every 30 minutes, the value that is checked is live.
 
 ![](https://i.imgur.com/Nr9MSVQ.png)
+
+### Everytime Item count crosses a 1,000,000 boundary
+
+Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
+
+Screenshot comming soon...
+
+### Everytime Property count crosses a 100 boundary
+
+Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
+
+Screenshot comming soon...
+
+### Everytime Lexeme count crosses a 10,000 boundary
+
+Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
+
+Screenshot comming soon...
 
 ## Development
 
@@ -43,7 +63,8 @@ docker build . -t twitter-wikidatameter
 Services:
 
 - [Github Actions](https://github.com/features/actions) - Building Docker images & running the cron for the bot
-- [Wikidata](https://www.wikidata.org) - Getting the data
+- [Wikidata](https://www.wikidata.org) - Getting the edit data (live)
+- [Wikimedia Graphite](graphite.wikimedia.org) - Getting entity count data (daily)
 - [JSONStorage.net](https://www.jsonstorage.net/) - Some persistence between runs
 - [Twitter](https://www.twitter.com) - For publishing the tweets
 
