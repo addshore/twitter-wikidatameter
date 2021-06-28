@@ -65,8 +65,8 @@ $data['wdNsPages146'] = array_key_exists('wdNsPages146',$data) ? $data['wdNsPage
 // Figure out if we need to make a new tweet
 $toPost = [];
 // wdEdits
-if ( intdiv($wdEdits, 1000000) > intdiv($data['wdEdits'], 1000000) ) {
-    $roundNumber = floor($wdEdits/1000000)*1000000;
+if ( intdiv($wdEdits, 10000000) > intdiv($data['wdEdits'], 10000000) ) {
+    $roundNumber = floor($wdEdits/10000000)*10000000;
     $formatted = number_format($roundNumber);
     $words = $numberToWords->toWords($roundNumber);
     $toPost[] = <<<TWEET
