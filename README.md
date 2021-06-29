@@ -7,7 +7,7 @@ I tweet a few fun things about Wikidata as it grows.
 
 Feel free to suggest more tweets by creating an Github issue.
 
-### Everytime another 1,000,000 edits happens
+### Everytime another 10,000,000 edits happens
 
 Bot checks this data every 30 minutes, the value that is checked is live.
 
