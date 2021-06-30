@@ -13,7 +13,7 @@ Bot checks this data every 30 minutes, the value that is checked is live.
 
 ![](https://i.imgur.com/Nr9MSVQ.png)
 
-### Everytime Item count crosses a 10,000,000 boundary
+### Everytime Item count crosses a 1,000,000 boundary
 
 Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
 
