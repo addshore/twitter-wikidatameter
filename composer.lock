@@ -65,22 +65,23 @@
         },
         {
             "name": "atymic/twitter",
-            "version": "3.1.10",
+            "version": "3.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atymic/twitter.git",
-                "reference": "73fc2bcdc02739ee55a4decc986b02d32bdbc191"
+                "reference": "5278f6fd63315f3ec367b64c91bd33edbfb11201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atymic/twitter/zipball/73fc2bcdc02739ee55a4decc986b02d32bdbc191",
-                "reference": "73fc2bcdc02739ee55a4decc986b02d32bdbc191",
+                "url": "https://api.github.com/repos/atymic/twitter/zipball/5278f6fd63315f3ec367b64c91bd33edbfb11201",
+                "reference": "5278f6fd63315f3ec367b64c91bd33edbfb11201",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.4 || ^7.0",
                 "guzzlehttp/oauth-subscriber": "^0.4",
+                "guzzlehttp/psr7": "^1.5",
                 "illuminate/support": "6 - 8",
                 "kamermans/guzzle-oauth2-subscriber": "^1.0",
                 "league/oauth2-client": "^2.6",
@@ -146,7 +147,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-28T06:51:15+00:00"
+            "time": "2021-07-09T03:11:06+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -618,16 +619,16 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.48.2",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "fe4a74465a43829d2067b7e7f9c49078506ff289"
+                "reference": "f9311a35779750f38bed47456c031c4dc4962274"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/fe4a74465a43829d2067b7e7f9c49078506ff289",
-                "reference": "fe4a74465a43829d2067b7e7f9c49078506ff289",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/f9311a35779750f38bed47456c031c4dc4962274",
+                "reference": "f9311a35779750f38bed47456c031c4dc4962274",
                 "shasum": ""
             },
             "require": {
@@ -664,11 +665,11 @@
             ],
             "description": "The Illuminate Collections package.",
             "homepage": "https://laravel.com",
-            "time": "2021-06-21T13:44:14+00:00"
+            "time": "2021-06-28T13:56:26+00:00"
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.48.2",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -712,7 +713,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.48.2",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -754,16 +755,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.48.2",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "6d925ec70e060a5a16949c79216389c66746a07f"
+                "reference": "0ecdbb8e61919e972c120c0956fb1c0a3b085967"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/6d925ec70e060a5a16949c79216389c66746a07f",
-                "reference": "6d925ec70e060a5a16949c79216389c66746a07f",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/0ecdbb8e61919e972c120c0956fb1c0a3b085967",
+                "reference": "0ecdbb8e61919e972c120c0956fb1c0a3b085967",
                 "shasum": ""
             },
             "require": {
@@ -814,20 +815,20 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2021-06-17T16:03:38+00:00"
+            "time": "2021-07-02T16:40:19+00:00"
         },
         {
             "name": "kamermans/guzzle-oauth2-subscriber",
-            "version": "v1.0.8",
+            "version": "v1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kamermans/guzzle-oauth2-subscriber.git",
-                "reference": "18fb67c97f38c6b463f1ccdcad95b641666e42c1"
+                "reference": "840fde5cf9971afa8b6f161baa84a7b14a72fada"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kamermans/guzzle-oauth2-subscriber/zipball/18fb67c97f38c6b463f1ccdcad95b641666e42c1",
-                "reference": "18fb67c97f38c6b463f1ccdcad95b641666e42c1",
+                "url": "https://api.github.com/repos/kamermans/guzzle-oauth2-subscriber/zipball/840fde5cf9971afa8b6f161baa84a7b14a72fada",
+                "reference": "840fde5cf9971afa8b6f161baa84a7b14a72fada",
                 "shasum": ""
             },
             "require": {
@@ -855,7 +856,7 @@
                 "Guzzle",
                 "oauth"
             ],
-            "time": "2020-12-10T00:38:57+00:00"
+            "time": "2021-06-28T17:29:34+00:00"
         },
         {
             "name": "kwn/number-to-words",
@@ -1029,16 +1030,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.49.0",
+            "version": "2.50.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "93d9db91c0235c486875d22f1e08b50bdf3e6eee"
+                "reference": "f47f17d17602b2243414a44ad53d9f8b9ada5fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/93d9db91c0235c486875d22f1e08b50bdf3e6eee",
-                "reference": "93d9db91c0235c486875d22f1e08b50bdf3e6eee",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/f47f17d17602b2243414a44ad53d9f8b9ada5fdb",
+                "reference": "f47f17d17602b2243414a44ad53d9f8b9ada5fdb",
                 "shasum": ""
             },
             "require": {
@@ -1090,15 +1091,15 @@
                 {
                     "name": "Brian Nesbitt",
                     "email": "brian@nesbot.com",
-                    "homepage": "http://nesbot.com"
+                    "homepage": "https://markido.com"
                 },
                 {
                     "name": "kylekatarnls",
-                    "homepage": "http://github.com/kylekatarnls"
+                    "homepage": "https://github.com/kylekatarnls"
                 }
             ],
             "description": "An API extension for DateTime that supports 281 different languages.",
-            "homepage": "http://carbon.nesbot.com",
+            "homepage": "https://carbon.nesbot.com",
             "keywords": [
                 "date",
                 "datetime",
@@ -1114,7 +1115,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-02T07:31:40+00:00"
+            "time": "2021-06-28T22:38:45+00:00"
         },
         {
             "name": "opis/closure",
@@ -2644,16 +2645,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "7e2603bcc598e14804c4d2359d8dc4ee3c40391b"
+                "reference": "380b8c9e944d0e364b25f28e8e555241eb49c01c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/7e2603bcc598e14804c4d2359d8dc4ee3c40391b",
-                "reference": "7e2603bcc598e14804c4d2359d8dc4ee3c40391b",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/380b8c9e944d0e364b25f28e8e555241eb49c01c",
+                "reference": "380b8c9e944d0e364b25f28e8e555241eb49c01c",
                 "shasum": ""
             },
             "require": {
@@ -2732,7 +2733,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-06T09:51:56+00:00"
+            "time": "2021-06-27T12:22:47+00:00"
         },
         {
             "name": "symfony/translation-contracts",
