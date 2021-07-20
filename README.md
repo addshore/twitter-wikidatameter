@@ -11,25 +11,25 @@ Feel free to suggest more tweets by creating an Github issue.
 
 Bot checks this data every 30 minutes, the value that is checked is live.
 
-![](https://i.imgur.com/Nr9MSVQ.png)
+![](https://i.imgur.com/mgjNAXs.png)
 
 ### Everytime Item count crosses a 1,000,000 boundary
 
 Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
 
-Screenshot comming soon...
+![](https://i.imgur.com/ShAGn9b.png)
 
 ### Everytime Property count crosses a 100 boundary
 
 Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
 
-Screenshot comming soon...
+![](https://i.imgur.com/Kp8Jx2b.png)
 
 ### Everytime Lexeme count crosses a 10,000 boundary
 
 Bot checks this data every 30 minutes, the value that is checked is calculated once a day.
 
-Screenshot comming soon...
+![](https://i.imgur.com/QYNDkNn.png)
 
 ## Development
 
