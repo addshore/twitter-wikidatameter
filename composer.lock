@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f3038ab0c450da425777401b85429d6",
+    "content-hash": "361a5e2a27c8a18c92ea51bcf9291ee3",
     "packages": [
         {
             "name": "addwiki/mediawiki-api-base",
@@ -860,24 +860,24 @@
         },
         {
             "name": "kwn/number-to-words",
-            "version": "1.13.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kwn/number-to-words.git",
-                "reference": "df61dc0f2fffe49f87319c9bcf1f7f44669152c7"
+                "reference": "76c9251cdaa6931a403257cd0d9a2a25a2367c39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kwn/number-to-words/zipball/df61dc0f2fffe49f87319c9bcf1f7f44669152c7",
-                "reference": "df61dc0f2fffe49f87319c9bcf1f7f44669152c7",
+                "url": "https://api.github.com/repos/kwn/number-to-words/zipball/76c9251cdaa6931a403257cd0d9a2a25a2367c39",
+                "reference": "76c9251cdaa6931a403257cd0d9a2a25a2367c39",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6|>=7.1"
+                "php": ">=7.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7.9",
-                "squizlabs/php_codesniffer": "^3.3.0"
+                "phpunit/phpunit": "^9.5.6",
+                "squizlabs/php_codesniffer": "^3.6.0"
             },
             "type": "library",
             "autoload": {
@@ -905,7 +905,7 @@
                 "to",
                 "words"
             ],
-            "time": "2021-06-23T20:47:44+00:00"
+            "time": "2021-07-20T09:12:58+00:00"
         },
         {
             "name": "league/oauth2-client",
