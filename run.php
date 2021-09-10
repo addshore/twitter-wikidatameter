@@ -43,7 +43,7 @@ $dataHash = md5(serialize($data));
 $wdStatistics = $wd->request( ActionRequest::simpleGet( 'query', [ 'meta' => 'siteinfo', 'siprop' => 'statistics' ] ) )['query']['statistics'];
 $wdEdits = $wdStatistics['edits'];
 
-// And state from graphite
+// And state from graphite (namespaces)
 $namespaceStatistics = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=daily.wikidata.site_stats.pages_by_namespace.{0,120,146}.nonredirects' );
 $namespaceStatistics = json_decode( $namespaceStatistics->getBody(), true );
 $wdNsPages = [];
@@ -56,11 +56,33 @@ foreach( $namespaceStatistics as $namespaceData ) {
     }
 }
 
+// And state from graphite (lexeme parts)
+$formCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.forms)' );
+$formCount = json_decode( $formCount->getBody(), true );
+$formCountInt = 0;
+foreach( $formCount as $formData ) {
+    foreach( $formData['datapoints'] as $datapoint ) {
+        // The last value will be the latest one
+        $formCountInt = (int)$datapoint[0];
+    }
+}
+$senseCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.senses)' );
+$senseCount = json_decode( $senseCount->getBody(), true );
+$senseCountInt = 0;
+foreach( $senseCount as $senseData ) {
+    foreach( $senseData['datapoints'] as $datapoint ) {
+        // The last value will be the latest one
+        $senseCountInt = (int)$datapoint[0];
+    }
+}
+
 // Initiate any un initiated state
 $data['wdEdits'] = array_key_exists('wdEdits',$data) ? $data['wdEdits'] : 0;
 $data['wdNsPages0'] = array_key_exists('wdNsPages0',$data) ? $data['wdNsPages0'] : 0;
 $data['wdNsPages120'] = array_key_exists('wdNsPages120',$data) ? $data['wdNsPages120'] : 0;
 $data['wdNsPages146'] = array_key_exists('wdNsPages146',$data) ? $data['wdNsPages146'] : 0;
+$data['wdLexemeForms'] = array_key_exists('wdLexemeForms',$data) ? $formCountInt : 0;
+$data['wdLexemeSenses'] = array_key_exists('wdLexemeSenses',$data) ? $senseCountInt : 0;
 
 // Figure out if we need to make a new tweet
 $toPost = [];
@@ -111,6 +133,28 @@ if ( intdiv($wdNsPages[146], 10000) > intdiv($data['wdNsPages146'], 10000) ) {
     You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=146
     TWEET;
     $data['wdNsPages146'] = $wdNsPages[146];
+}
+// wdLexemeForms (starting at 9,815,747)
+if ( intdiv($wdLexemeForms, 100000) > intdiv($data['wdLexemeForms'], 100000) ) {
+    $roundNumber = floor($wdLexemeForms/100000)*100000;
+    $formatted = number_format($roundNumber);
+    $words = $numberToWords->toWords($roundNumber);
+    $toPost[] = <<<TWEET
+    Wikidata now has over ${formatted} Forms on Lexemes!
+    That's over ${words}...
+    TWEET;
+    $data['wdLexemeForms'] = $wdLexemeForms;
+}
+// wdLexemeSenses (starting at 153,036)
+if ( intdiv($wdLexemeSenses, 10000) > intdiv($data['wdLexemeSenses'], 10000) ) {
+    $roundNumber = floor($wdLexemeSenses/10000)*10000;
+    $formatted = number_format($roundNumber);
+    $words = $numberToWords->toWords($roundNumber);
+    $toPost[] = <<<TWEET
+    Wikidata now has over ${formatted} Senses on Lexemes!
+    That's over ${words}...
+    TWEET;
+    $data['wdLexemeSenses'] = $wdLexemeSenses;
 }
 
 // Persist any changed state
