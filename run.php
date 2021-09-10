@@ -59,20 +59,20 @@ foreach( $namespaceStatistics as $namespaceData ) {
 // And state from graphite (lexeme parts)
 $formCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.forms)' );
 $formCount = json_decode( $formCount->getBody(), true );
-$formCountInt = 0;
+$wdLexemeForms = 0;
 foreach( $formCount as $formData ) {
     foreach( $formData['datapoints'] as $datapoint ) {
         // The last value will be the latest one
-        $formCountInt = (int)$datapoint[0];
+        $wdLexemeForms = (int)$datapoint[0];
     }
 }
 $senseCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.senses)' );
 $senseCount = json_decode( $senseCount->getBody(), true );
-$senseCountInt = 0;
+$wdLexemeSenses = 0;
 foreach( $senseCount as $senseData ) {
     foreach( $senseData['datapoints'] as $datapoint ) {
         // The last value will be the latest one
-        $senseCountInt = (int)$datapoint[0];
+        $wdLexemeSenses = (int)$datapoint[0];
     }
 }
 
@@ -81,8 +81,8 @@ $data['wdEdits'] = array_key_exists('wdEdits',$data) ? $data['wdEdits'] : 0;
 $data['wdNsPages0'] = array_key_exists('wdNsPages0',$data) ? $data['wdNsPages0'] : 0;
 $data['wdNsPages120'] = array_key_exists('wdNsPages120',$data) ? $data['wdNsPages120'] : 0;
 $data['wdNsPages146'] = array_key_exists('wdNsPages146',$data) ? $data['wdNsPages146'] : 0;
-$data['wdLexemeForms'] = array_key_exists('wdLexemeForms',$data) ? $formCountInt : 0;
-$data['wdLexemeSenses'] = array_key_exists('wdLexemeSenses',$data) ? $senseCountInt : 0;
+$data['wdLexemeForms'] = array_key_exists('wdLexemeForms',$data) ? $wdLexemeForms : 0;
+$data['wdLexemeSenses'] = array_key_exists('wdLexemeSenses',$data) ? $wdLexemeSenses : 0;
 
 // Figure out if we need to make a new tweet
 $toPost = [];
