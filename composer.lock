@@ -948,16 +948,16 @@
         },
         {
             "name": "kwn/number-to-words",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kwn/number-to-words.git",
-                "reference": "e091dca69236ff112fa41c3da1fb4ca39f9d05dc"
+                "reference": "eb5d3493a5df0e3bac8a5156051ab9bcc35ec837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kwn/number-to-words/zipball/e091dca69236ff112fa41c3da1fb4ca39f9d05dc",
-                "reference": "e091dca69236ff112fa41c3da1fb4ca39f9d05dc",
+                "url": "https://api.github.com/repos/kwn/number-to-words/zipball/eb5d3493a5df0e3bac8a5156051ab9bcc35ec837",
+                "reference": "eb5d3493a5df0e3bac8a5156051ab9bcc35ec837",
                 "shasum": ""
             },
             "require": {
@@ -993,7 +993,7 @@
                 "to",
                 "words"
             ],
-            "time": "2021-09-19T13:38:29+00:00"
+            "time": "2021-10-06T10:54:44+00:00"
         },
         {
             "name": "league/oauth2-client",
