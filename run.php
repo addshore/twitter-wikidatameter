@@ -1,178 +1,148 @@
 <?php
 
-use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\MediaWiki;
-use Atymic\Twitter\ApiV1\Service\Twitter;
-use Atymic\Twitter\Configuration as TwitterConf;
-use Atymic\Twitter\Http\Factory\ClientCreator as TwitterClientCreator;
-use Atymic\Twitter\Service\Querier as TwitterQuerier;
 use GuzzleHttp\Client as Guzzle;
 use NumberToWords\NumberToWords;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Load Environment from a file (only if it exists)
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
-$dotenv->safeLoad();
+(new Addshore\Twitter\WikidataMeter\EnvLoader\EnvFromDirectory(__DIR__))->load();
 
-// Service Objects
-$tw = new Twitter(
-    new TwitterQuerier(
-        TwitterConf::createFromConfig(
-            require_once __DIR__ . '/vendor/atymic/twitter/config/twitter.php'
-        ),
-        new TwitterClientCreator()
-    )
-);
-$store = new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
-$graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
-$wd = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' )->action();
 $numberToWords = (new NumberToWords())->getNumberTransformer('en');
+$wikidata = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' );
+$graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
 
-// Load our existing state
-$storeGet = $store->request('GET');
-$data = json_decode( $storeGet->getBody(), true );
-$dataHash = md5(serialize($data));
-// $recentPosts = $tw->getUserTimeline([
-//     'screen_name' => getenv('TWITTER_USER'),
-//     'count' => 200,
-// ]);
-// $posted = array_map( (function($a) { return $a->text; }), $posted );
+$out = new \Addshore\Twitter\WikidataMeter\Output\MultiOut(
+    new \Addshore\Twitter\WikidataMeter\Output\EchoOut(),
+);
 
-// And state of wikidata
-$wdStatistics = $wd->request( ActionRequest::simpleGet( 'query', [ 'meta' => 'siteinfo', 'siprop' => 'statistics' ] ) )['query']['statistics'];
-$wdEdits = $wdStatistics['edits'];
+// Some switches for some local testing..?
+if(getenv('I_AM_BRING_TESTED') === false) {
+    // Production only path
+    $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageNet();
+    $out->add( new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/vendor/atymic/twitter/config/twitter.php') );
+} else {
+    // Test only path
+    $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageFile( __DIR__ . '/.tmp.data' );
+}
 
-// And state from graphite (namespaces)
-$namespaceStatistics = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=daily.wikidata.site_stats.pages_by_namespace.{0,120,146}.nonredirects' );
-$namespaceStatistics = json_decode( $namespaceStatistics->getBody(), true );
-$wdNsPages = [];
-foreach( $namespaceStatistics as $namespaceData ) {
-    $target = $namespaceData['target'];
-    $nsId = (int)str_replace('daily.wikidata.site_stats.pages_by_namespace.','',str_replace('.nonredirects','',$target));
-    foreach( $namespaceData['datapoints'] as $datapoint ) {
-        // The last value will be the latest one
-        $wdNsPages[$nsId] = (int)$datapoint[0];
+const CONF_DATA_POINT = "datapoint";
+const CONF_STEP = "step";
+const CONF_OUTPUT = "output";
+
+const STORE_WIKIDATA_EDITS = 'wdEdits';
+const STORE_WIKIDATA_PAGES_NS_0 = 'wdNsPages0';
+const STORE_WIKIDATA_PAGES_NS_120 = 'wdNsPages120';
+const STORE_WIKIDATA_PAGES_NS_146 = 'wdNsPages146';
+const STORE_WIKIDATA_LEXEME_FORMS = 'wdLexemeForms';
+const STORE_WIKIDATA_LEXEME_SENSES = 'wdLexemeSenses';
+
+$config = [
+    STORE_WIKIDATA_EDITS => [ // Wikidata Edits
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\MediaWikiEdits( $wikidata ),
+        CONF_STEP => 10000000, // 10 million
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} edits!
+            That's over ${words}...
+            You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${round}
+            OUT;
+        },
+    ],
+    STORE_WIKIDATA_PAGES_NS_0 => [ // Wikidata Items
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.0.nonredirects' ),
+        CONF_STEP => 1000000, // 1 million
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} Items!
+            That's over ${words}...
+            You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=0
+            OUT;
+        },
+    ],
+    STORE_WIKIDATA_PAGES_NS_120 => [ // Wikidata Properties
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.120.nonredirects' ),
+        CONF_STEP => 100, // 100
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} Properties!
+            That's over ${words}...
+            You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=120
+            OUT;
+        },
+    ],
+    STORE_WIKIDATA_PAGES_NS_146 => [ // Wikidata Lexemes
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.146.nonredirects' ),
+        CONF_STEP => 10000, // 10k
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} Lexemes!
+            That's over ${words}...
+            You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=146
+            OUT;
+        },
+    ],
+    STORE_WIKIDATA_LEXEME_FORMS => [ // Wikidata Lexeme Forms
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.forms)' ),
+        CONF_STEP => 10000, // 10k
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} Forms on Lexemes!
+            That's over ${words}...
+            OUT;
+        },
+    ],
+    STORE_WIKIDATA_LEXEME_SENSES => [ // Wikidata Lexeme Senses
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.senses)' ),
+        CONF_STEP => 10000, // 10k
+        CONF_OUTPUT => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikidata now has over ${formatted} Senses on Lexemes!
+            That's over ${words}...
+            OUT;
+        },
+    ],
+];
+
+/**
+ * Logic starts below here! =]
+ */
+
+// Load current source of truth
+echo "Stage 1: Loading current state." . PHP_EOL;
+$store->syncFromSourceOfTruth();
+$store->initKeys(array_keys($config), 0);
+
+// Use the config to check for new data, and collect new output
+echo "Stage 2: Collecting new output." . PHP_EOL;
+$toOutput = [];
+foreach( $config as $key => $details ) {
+    $value = $details[CONF_DATA_POINT]->get();
+    $step = $details[CONF_STEP];
+    if ( intdiv($value, $step) > intdiv($store->getValue($key), $step) ) {
+        $roundNumber = floor($value/$step)*$step;
+        $formatted = number_format($roundNumber);
+        $words = $numberToWords->toWords($roundNumber);
+        $toOutput[] = $details[CONF_OUTPUT]( $value, $step, $roundNumber, $formatted, $words );
+        $store->setValue($key, $value);
     }
 }
 
-// And state from graphite (lexeme parts)
-$formCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.forms)' );
-$formCount = json_decode( $formCount->getBody(), true );
-$wdLexemeForms = 0;
-foreach( $formCount as $formData ) {
-    foreach( $formData['datapoints'] as $datapoint ) {
-        // The last value will be the latest one
-        $wdLexemeForms = (int)$datapoint[0];
-    }
+// Store new knowledge
+if( $store->changed() ) {
+    echo "Stage 3: Persisting changed state." . PHP_EOL;
+    var_dump($store->dump());
+    $store->syncToSourceOfTruth();
 }
-$senseCount = $graphite->request( 'GET', '?format=json&from=-2d&until=now&target=sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.senses)' );
-$senseCount = json_decode( $senseCount->getBody(), true );
-$wdLexemeSenses = 0;
-foreach( $senseCount as $senseData ) {
-    foreach( $senseData['datapoints'] as $datapoint ) {
-        // The last value will be the latest one
-        $wdLexemeSenses = (int)$datapoint[0];
+
+// Output what we need
+if( count( $toOutput ) > 0 ) {
+    echo "Stage 4: Sending new output." . PHP_EOL;
+    foreach( $toOutput as $one ) {
+        $out->output( $one );
     }
 }
 
-// Initiate any un initiated state
-$data['wdEdits'] = array_key_exists('wdEdits',$data) ? $data['wdEdits'] : 0;
-$data['wdNsPages0'] = array_key_exists('wdNsPages0',$data) ? $data['wdNsPages0'] : 0;
-$data['wdNsPages120'] = array_key_exists('wdNsPages120',$data) ? $data['wdNsPages120'] : 0;
-$data['wdNsPages146'] = array_key_exists('wdNsPages146',$data) ? $data['wdNsPages146'] : 0;
-$data['wdLexemeForms'] = array_key_exists('wdLexemeForms',$data) ? $wdLexemeForms : 0;
-$data['wdLexemeSenses'] = array_key_exists('wdLexemeSenses',$data) ? $wdLexemeSenses : 0;
-
-// Figure out if we need to make a new tweet
-$toPost = [];
-// wdEdits
-if ( intdiv($wdEdits, 10000000) > intdiv($data['wdEdits'], 10000000) ) {
-    $roundNumber = floor($wdEdits/10000000)*10000000;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} edits!
-    That's over ${words}...
-    You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${roundNumber}
-    TWEET;
-    $data['wdEdits'] = $wdEdits;
-}
-// wdNsPages0 (items)
-if ( intdiv($wdNsPages[0], 1000000) > intdiv($data['wdNsPages0'], 1000000) ) {
-    $roundNumber = floor($wdNsPages[0]/1000000)*1000000;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} Items!
-    That's over ${words}...
-    You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=0
-    TWEET;
-    $data['wdNsPages0'] = $wdNsPages[0];
-}
-// wdNsPages120 (properties)
-if ( intdiv($wdNsPages[120], 100) > intdiv($data['wdNsPages120'], 100) ) {
-    $roundNumber = floor($wdNsPages[120]/100)*100;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} Properties!
-    That's over ${words}...
-    You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=120
-    TWEET;
-    $data['wdNsPages120'] = $wdNsPages[120];
-}
-// wdNsPages146 (lexemes)
-if ( intdiv($wdNsPages[146], 10000) > intdiv($data['wdNsPages146'], 10000) ) {
-    $roundNumber = floor($wdNsPages[146]/10000)*10000;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} Lexemes!
-    That's over ${words}...
-    You can find the latest creations here https://www.wikidata.org/wiki/Special:NewPages?namespace=146
-    TWEET;
-    $data['wdNsPages146'] = $wdNsPages[146];
-}
-// wdLexemeForms (starting at 9,815,747)
-if ( intdiv($wdLexemeForms, 100000) > intdiv($data['wdLexemeForms'], 100000) ) {
-    $roundNumber = floor($wdLexemeForms/100000)*100000;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} Forms on Lexemes!
-    That's over ${words}...
-    TWEET;
-    $data['wdLexemeForms'] = $wdLexemeForms;
-}
-// wdLexemeSenses (starting at 153,036)
-if ( intdiv($wdLexemeSenses, 10000) > intdiv($data['wdLexemeSenses'], 10000) ) {
-    $roundNumber = floor($wdLexemeSenses/10000)*10000;
-    $formatted = number_format($roundNumber);
-    $words = $numberToWords->toWords($roundNumber);
-    $toPost[] = <<<TWEET
-    Wikidata now has over ${formatted} Senses on Lexemes!
-    That's over ${words}...
-    TWEET;
-    $data['wdLexemeSenses'] = $wdLexemeSenses;
-}
-
-// Persist any changed state
-// Do this before we tweet, incase it fails (then we will simply retry on the next run)
-if( $dataHash !== md5(serialize($data)) ){
-    echo "Persisting changed state." . PHP_EOL;
-    var_dump($data);
-    $store->request('PUT', '', [ 'body' => json_encode( $data ), 'headers' => [ 'content-type' => 'application/json; charset=utf-8' ] ]);
-}
-
-// Make new tweets
-foreach( $toPost as $tweetText ) {
-    echo "Tweeting: ${tweetText}" . PHP_EOL;
-    $a = $tw->postTweet([
-        'status' => $tweetText
-    ]);
-    sleep(2);
-}
 
 // All done!
-echo PHP_EOL . "All done!" . PHP_EOL;
+echo "All done!" . PHP_EOL;
