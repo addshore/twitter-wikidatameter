@@ -4,8 +4,8 @@ namespace Addshore\Twitter\WikidataMeter\DataPoint;
 
 class GraphiteDailyLatest implements DataPoint {
 
-    private $client;
-    private $metricName;
+    private \GuzzleHttp\Client $client;
+    private string $metricName;
     
     public function __construct( \GuzzleHttp\Client $client, string $metricName ) {
         $this->client = $client;
