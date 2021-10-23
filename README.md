@@ -39,6 +39,14 @@ You'll need to install my dependencies using composer.
 composer install
 ```
 
+You can run a single localy only echo version using:
+
+```sh
+I_AM_BRING_TESTED=1 php run.php
+```
+
+This will not use the main persistent storage, and also it will not tweet!
+
 And in order to fully integrate with the services you'll need to populate a `.env` file.
 Checkout `.env.example` for what is needed.
 

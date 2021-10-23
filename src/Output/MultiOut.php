@@ -10,6 +10,10 @@ class MultiOut implements Output {
         $this->outputs = $outputs;
     }
 
+    public function add( Output $output ) : void {
+        $this->outputs[] = $output;
+    }
+
     public function output( string $toOutput ) : void {
         foreach( $this->outputs as $output ) {
             $output->output( $toOutput );

@@ -29,6 +29,9 @@ class TwitterOut implements Output {
         $this->tw->postTweet([
             'status' => $toOutput
         ]);
+        // Sleep for 2 to avoid spamming the API.
+        // TODO have a less crappy solution for this...
+        sleep(2);
     }
 
 }

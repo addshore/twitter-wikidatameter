@@ -9,14 +9,22 @@ require_once __DIR__ . '/vendor/autoload.php';
 (new Addshore\Twitter\WikidataMeter\EnvLoader\EnvFromDirectory(__DIR__))->load();
 
 $numberToWords = (new NumberToWords())->getNumberTransformer('en');
-$store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageNet();
 $wikidata = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' );
 $graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
 
 $out = new \Addshore\Twitter\WikidataMeter\Output\MultiOut(
     new \Addshore\Twitter\WikidataMeter\Output\EchoOut(),
-    new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/vendor/atymic/twitter/config/twitter.php'),
 );
+
+// Some switches for some local testing..?
+if(getenv('I_AM_BRING_TESTED') === false) {
+    // Production only path
+    $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageNet();
+    $out->add( new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/vendor/atymic/twitter/config/twitter.php') );
+} else {
+    // Test only path
+    $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageFile( __DIR__ . '/.tmp.data' );
+}
 
 const CONF_DATA_POINT = "datapoint";
 const CONF_STEP = "step";
@@ -37,7 +45,7 @@ $config = [
             return <<<OUT
             Wikidata now has over ${formatted} edits!
             That's over ${words}...
-            You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${roundNumber}
+            You can find the milestone edit here https://www.wikidata.org/w/index.php?diff=${round}
             OUT;
         },
     ],
@@ -101,10 +109,12 @@ $config = [
  */
 
 // Load current source of truth
+echo "Stage 1: Loading current state." . PHP_EOL;
 $store->syncFromSourceOfTruth();
 $store->initKeys(array_keys($config), 0);
 
 // Use the config to check for new data, and collect new output
+echo "Stage 2: Collecting new output." . PHP_EOL;
 $toOutput = [];
 foreach( $config as $key => $details ) {
     $value = $details[CONF_DATA_POINT]->get();
@@ -113,23 +123,26 @@ foreach( $config as $key => $details ) {
         $roundNumber = floor($value/$step)*$step;
         $formatted = number_format($roundNumber);
         $words = $numberToWords->toWords($roundNumber);
-        $toOutput[] = $config[CONF_OUTPUT]( $value, $step, $roundNumber, $formatted, $words );
+        $toOutput[] = $details[CONF_OUTPUT]( $value, $step, $roundNumber, $formatted, $words );
         $store->setValue($key, $value);
     }
 }
 
 // Store new knowledge
 if( $store->changed() ) {
-    echo "Persisting changed state." . PHP_EOL;
+    echo "Stage 3: Persisting changed state." . PHP_EOL;
     var_dump($store->dump());
     $store->syncToSourceOfTruth();
 }
 
 // Output what we need
-foreach( $toOutput as $one ) {
-    $out->output( $one );
-    sleep(2);
+if( count( $toOutput ) > 0 ) {
+    echo "Stage 4: Sending new output." . PHP_EOL;
+    foreach( $toOutput as $one ) {
+        $out->output( $one );
+    }
 }
 
+
 // All done!
-echo PHP_EOL . "All done!" . PHP_EOL;
+echo "All done!" . PHP_EOL;
