@@ -4,7 +4,7 @@ namespace Addshore\Twitter\WikidataMeter\Output;
 
 class MultiOut implements Output {
 
-    private $outputs;
+    private array $outputs;
 
     public function __construct( Output ...$outputs ) {
         $this->outputs = $outputs;

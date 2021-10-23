@@ -9,7 +9,7 @@ use Atymic\Twitter\Service\Querier as TwitterQuerier;
 
 class TwitterOut implements Output {
 
-    private $tw;
+    private \Atymic\Twitter\ApiV1\Service\Twitter $tw;
 
     /**
      * @param string $configPath consumable by TwitterConf::createFromConfig
