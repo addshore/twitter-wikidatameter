@@ -20,7 +20,7 @@ $out = new \Addshore\Twitter\WikidataMeter\Output\MultiOut(
 if(getenv('I_AM_BRING_TESTED') === false) {
     // Production only path
     $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageNet();
-    $out->add( new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/vendor/atymic/twitter/config/twitter.php') );
+    $out->add( new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikidatameter.php') );
 } else {
     // Test only path
     $store = new \Addshore\Twitter\WikidataMeter\KeyValue\JsonStorageFile( __DIR__ . '/.tmp.data' );
