@@ -6,7 +6,7 @@ class JsonStorageFile implements KeyValue {
 
     use InMemDataTrait;
 
-    private $file;
+    private string $file;
 
     public function __construct( string $file ) {
         $this->file = $file;

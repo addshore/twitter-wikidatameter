@@ -2,7 +2,7 @@
 
 // You can find the keys here : https://developer.twitter.com/en/portal/projects-and-apps
 
-$twitterConfig = require __DIR__ . '../../vendor/atymic/twitter/config/twitter.php';
+$twitterConfig = require __DIR__ . '/../../vendor/atymic/twitter/config/twitter.php';
 
 $twitterConfig['consumer_key'] = env('TWITTER_WIKIPEDIAMETER_CONSUMER_KEY');
 $twitterConfig['consumer_secret'] = env('TWITTER_WIKIPEDIAMETER_CONSUMER_SECRET');

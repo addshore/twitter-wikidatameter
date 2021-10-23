@@ -4,7 +4,7 @@ namespace Addshore\Twitter\WikidataMeter\KeyValue;
 
 trait InMemDataTrait{
 
-    private $data;
+    private ?array $data = null;
     private bool $changed = false;
 
     function changed() : bool{
