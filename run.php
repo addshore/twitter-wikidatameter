@@ -10,6 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 (new Addshore\Twitter\WikidataMeter\EnvLoader\EnvFromDirectory(__DIR__))->load();
 
 $numberToWords = (new NumberToWords())->getNumberTransformer('en');
+$enwiki = MediaWiki::newFromEndpoint( 'https://en.wikipedia.org/w/api.php' );
 $wikidata = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' );
 $graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
 
@@ -29,6 +30,7 @@ const CONF_STEP = "step";
 const CONF_MESSAGE = "message";
 const CONF_OUTPUTS = "outputs";
 
+const STORE_ENWIKI_EDITS = "enwiki_edits";
 const STORE_WIKIDATA_EDITS = 'wdEdits';
 const STORE_WIKIDATA_PAGES_NS_0 = 'wdNsPages0';
 const STORE_WIKIDATA_PAGES_NS_120 = 'wdNsPages120';
@@ -37,6 +39,18 @@ const STORE_WIKIDATA_LEXEME_FORMS = 'wdLexemeForms';
 const STORE_WIKIDATA_LEXEME_SENSES = 'wdLexemeSenses';
 
 $config = [
+    STORE_ENWIKI_EDITS => [ // en.wikipedia Edits
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\MediaWikiEdits( $enwiki ),
+        CONF_STEP => 1000000, // 1 million
+        CONF_OUTPUTS => new MultiOut( $outTwitterWikipediaMeter ),
+        CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            English Wikipedia now has over ${formatted} edits!
+            That's over ${words}...
+            You can find the milestone edit here https://en.wikipedia.org/w/index.php?oldid=${round}
+            OUT;
+        },
+    ],
     STORE_WIKIDATA_EDITS => [ // Wikidata Edits
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\MediaWikiEdits( $wikidata ),
         CONF_STEP => 10000000, // 10 million
