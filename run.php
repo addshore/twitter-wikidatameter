@@ -2,28 +2,17 @@
 
 use Addwiki\Mediawiki\Api\Client\Action\Request\ActionRequest;
 use Addwiki\Mediawiki\Api\Client\MediaWiki;
-use Atymic\Twitter\ApiV1\Service\Twitter;
-use Atymic\Twitter\Configuration as TwitterConf;
-use Atymic\Twitter\Http\Factory\ClientCreator as TwitterClientCreator;
-use Atymic\Twitter\Service\Querier as TwitterQuerier;
 use GuzzleHttp\Client as Guzzle;
 use NumberToWords\NumberToWords;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Load Environment from a file (only if it exists)
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
-$dotenv->safeLoad();
-
-// Service Objects
-$tw = new Twitter(
-    new TwitterQuerier(
-        TwitterConf::createFromConfig(
-            require_once __DIR__ . '/vendor/atymic/twitter/config/twitter.php'
-        ),
-        new TwitterClientCreator()
-    )
+(new Addshore\Twitter\WikidataMeter\EnvLoader\EnvFromDirectory(__DIR__))->load();
+$out = new \Addshore\Twitter\WikidataMeter\Output\MultiOut(
+    new \Addshore\Twitter\WikidataMeter\Output\EchoOut(),
+    new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/vendor/atymic/twitter/config/twitter.php'),
 );
+
 $store = new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
 $graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
 $wd = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' )->action();
@@ -165,12 +154,9 @@ if( $dataHash !== md5(serialize($data)) ){
     $store->request('PUT', '', [ 'body' => json_encode( $data ), 'headers' => [ 'content-type' => 'application/json; charset=utf-8' ] ]);
 }
 
-// Make new tweets
-foreach( $toPost as $tweetText ) {
-    echo "Tweeting: ${tweetText}" . PHP_EOL;
-    $a = $tw->postTweet([
-        'status' => $tweetText
-    ]);
+// Output the desired things
+foreach( $toPost as $toOutput ) {
+    $out->output( $toOutput );
     sleep(2);
 }
 
