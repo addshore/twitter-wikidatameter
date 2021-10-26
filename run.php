@@ -17,6 +17,7 @@ $wmRest = new Guzzle(['base_uri' => 'https://wikimedia.org/api/rest_v1']);
 
 $outTwitterWikidataMeter = new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikidatameter.php');
 $outTwitterWikipediaMeter = new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikipediameter.php');
+$outTwitterWikimediaMeter = new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikimediameter.php');
 $outEcho = new \Addshore\Twitter\WikidataMeter\Output\EchoOut();
 
 // Switch to local storage if we are locally testing
@@ -31,6 +32,7 @@ const CONF_STEP = "step";
 const CONF_MESSAGE = "message";
 const CONF_OUTPUTS = "outputs";
 
+const STORE_WIKIMEDIA_EDITS = "wikimedia_edits";
 const STORE_WIKIPEDIA_EDITS = "wikipedia_edits";
 const STORE_ENWIKI_EDITS = "enwiki_edits";
 const STORE_WIKIDATA_EDITS = 'wdEdits';
@@ -46,6 +48,18 @@ const ONE_MILLION = 1000000;
 const TEN_MILLION = 10000000;
 
 $config = [
+    STORE_WIKIMEDIA_EDITS => [ // All Wikimedia project edits
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\AggregateEditsRest( $wmRest, 'all-projects' ),
+        CONF_STEP => TEN_MILLION,
+        CONF_OUTPUTS => new MultiOut( $outTwitterWikimediaMeter ),
+        CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikimedia, across all projects, now has over ${formatted} edits!
+            That's over ${words}...
+            See the history https://stats.wikimedia.org/#/all-projects/contributing/edits/normal|bar|all|~total|monthly
+            OUT;
+        },
+    ],
     STORE_WIKIPEDIA_EDITS => [ // All language Wikipedia edits
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\AggregateEditsRest( $wmRest, 'all-wikipedia-projects' ),
         CONF_STEP => TEN_MILLION,
