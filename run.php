@@ -13,6 +13,7 @@ $numberToWords = (new NumberToWords())->getNumberTransformer('en');
 $enwiki = MediaWiki::newFromEndpoint( 'https://en.wikipedia.org/w/api.php' );
 $wikidata = MediaWiki::newFromEndpoint( 'https://www.wikidata.org/w/api.php' );
 $graphite = new Guzzle(['base_uri' => 'https://graphite.wikimedia.org/render']);
+$wmRest = new Guzzle(['base_uri' => 'https://wikimedia.org/api/rest_v1']);
 
 $outTwitterWikidataMeter = new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikidatameter.php');
 $outTwitterWikipediaMeter = new \Addshore\Twitter\WikidataMeter\Output\TwitterOut(__DIR__ . '/config/twitter/wikipediameter.php');
@@ -30,6 +31,7 @@ const CONF_STEP = "step";
 const CONF_MESSAGE = "message";
 const CONF_OUTPUTS = "outputs";
 
+const STORE_WIKIPEDIA_EDITS = "wikipedia_edits";
 const STORE_ENWIKI_EDITS = "enwiki_edits";
 const STORE_WIKIDATA_EDITS = 'wdEdits';
 const STORE_WIKIDATA_PAGES_NS_0 = 'wdNsPages0';
@@ -38,10 +40,27 @@ const STORE_WIKIDATA_PAGES_NS_146 = 'wdNsPages146';
 const STORE_WIKIDATA_LEXEME_FORMS = 'wdLexemeForms';
 const STORE_WIKIDATA_LEXEME_SENSES = 'wdLexemeSenses';
 
+const ONE_HUNDRED = 100;
+const TEN_THOUSAND = 10000;
+const ONE_MILLION = 1000000;
+const TEN_MILLION = 10000000;
+
 $config = [
+    STORE_WIKIPEDIA_EDITS => [ // All language Wikipedia edits
+        CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\AggregateEditsRest( $wmRest, 'all-wikipedia-projects' ),
+        CONF_STEP => TEN_MILLION,
+        CONF_OUTPUTS => new MultiOut( $outTwitterWikipediaMeter ),
+        CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
+            return <<<OUT
+            Wikipedia, across all languages, now has over ${formatted} edits!
+            That's over ${words}...
+            See the history https://stats.wikimedia.org/#/all-wikipedia-projects/contributing/edits/normal|bar|all|~total|monthly
+            OUT;
+        },
+    ],
     STORE_ENWIKI_EDITS => [ // en.wikipedia Edits
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\MediaWikiEdits( $enwiki ),
-        CONF_STEP => 1000000, // 1 million
+        CONF_STEP => TEN_MILLION,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikipediaMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -53,7 +72,7 @@ $config = [
     ],
     STORE_WIKIDATA_EDITS => [ // Wikidata Edits
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\MediaWikiEdits( $wikidata ),
-        CONF_STEP => 10000000, // 10 million
+        CONF_STEP => TEN_MILLION,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -65,7 +84,7 @@ $config = [
     ],
     STORE_WIKIDATA_PAGES_NS_0 => [ // Wikidata Items
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.0.nonredirects' ),
-        CONF_STEP => 1000000, // 1 million
+        CONF_STEP => ONE_MILLION,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -77,7 +96,7 @@ $config = [
     ],
     STORE_WIKIDATA_PAGES_NS_120 => [ // Wikidata Properties
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.120.nonredirects' ),
-        CONF_STEP => 100, // 100
+        CONF_STEP => ONE_HUNDRED,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -89,7 +108,7 @@ $config = [
     ],
     STORE_WIKIDATA_PAGES_NS_146 => [ // Wikidata Lexemes
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'daily.wikidata.site_stats.pages_by_namespace.146.nonredirects' ),
-        CONF_STEP => 10000, // 10k
+        CONF_STEP => TEN_THOUSAND,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -101,7 +120,7 @@ $config = [
     ],
     STORE_WIKIDATA_LEXEME_FORMS => [ // Wikidata Lexeme Forms
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.forms)' ),
-        CONF_STEP => 10000, // 10k
+        CONF_STEP => TEN_THOUSAND,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
@@ -112,7 +131,7 @@ $config = [
     ],
     STORE_WIKIDATA_LEXEME_SENSES => [ // Wikidata Lexeme Senses
         CONF_DATA_POINT => new Addshore\Twitter\WikidataMeter\DataPoint\GraphiteDailyLatest( $graphite, 'sumSeries(daily.wikidata.datamodel.lexeme.languageItem.*.senses)' ),
-        CONF_STEP => 10000, // 10k
+        CONF_STEP => TEN_THOUSAND,
         CONF_OUTPUTS => new MultiOut( $outTwitterWikidataMeter ),
         CONF_MESSAGE => function ( int $value, int $step, int $round, string $formatted, string $words ) {
             return <<<OUT
