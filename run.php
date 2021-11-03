@@ -178,6 +178,8 @@ foreach( $config as $key => $details ) {
         $outputCollection[$key] = $details[CONF_MESSAGE]( $value, $step, $roundNumber, $formatted, $words );
         $store->setValue($key, $value);
     }
+    // TODO output info about how far away from the next step we are?
+    echo " - For " . $key . " got " . $value . PHP_EOL;
 }
 
 // Store new knowledge
