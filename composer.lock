@@ -3275,16 +3275,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.5",
+            "version": "0.12.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "e50e40e0fe73b88a46f27e086441e1998ceeca3c"
+                "reference": "21b47be5bd958ff90d8de228a435c1c7b892e925"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/e50e40e0fe73b88a46f27e086441e1998ceeca3c",
-                "reference": "e50e40e0fe73b88a46f27e086441e1998ceeca3c",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/21b47be5bd958ff90d8de228a435c1c7b892e925",
+                "reference": "21b47be5bd958ff90d8de228a435c1c7b892e925",
                 "shasum": ""
             },
             "require": {
@@ -3327,7 +3327,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-23T17:38:29+00:00"
+            "time": "2021-12-09T16:47:00+00:00"
         }
     ],
     "aliases": [],
