@@ -9,7 +9,7 @@ class JsonStorageNet implements KeyValue {
     use InMemDataTrait;
 
     private function client() {
-        return new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
+        return new Guzzle(['base_uri' => 'https://api.jsonstorage.net/v1/json/' . getenv('JSONSTORAGE_USER') . '/' . getenv('JSONSTORAGE_OBJECT') . '?apiKey=' . getenv('JSONSTORAGE_KEY')]);
     }
 
 	function syncFromSourceOfTruth() : void{
