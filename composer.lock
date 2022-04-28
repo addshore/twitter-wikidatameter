@@ -3301,16 +3301,16 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.5.6",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1"
+                "reference": "6128620b98292e0b69ea6d799871d77163681c8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
-                "reference": "799dd8c2d2c9c704bb55d2078078cb970cf0f6d1",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6128620b98292e0b69ea6d799871d77163681c8e",
+                "reference": "6128620b98292e0b69ea6d799871d77163681c8e",
                 "shasum": ""
             },
             "require": {
@@ -3352,25 +3352,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-15T11:13:37+00:00"
+            "time": "2022-04-28T11:27:53+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "0.12.21",
+            "version": "0.12.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4"
+                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
-                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/0e76f19491498c136b698dc22b9b30d44a4e832c",
+                "reference": "0e76f19491498c136b698dc22b9b30d44a4e832c",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.5.6"
+                "phpstan/phpstan": "^1.6"
             },
             "conflict": {
                 "phpstan/phpdoc-parser": "<1.2",
@@ -3408,7 +3408,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-18T12:12:41+00:00"
+            "time": "2022-04-27T22:44:46+00:00"
         }
     ],
     "aliases": [],
