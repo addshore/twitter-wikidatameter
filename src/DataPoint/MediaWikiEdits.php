@@ -15,7 +15,6 @@ class MediaWikiEdits implements DataPoint {
 
     public function get() : int {
         $wdStatistics = $this->mw->action()->request( ActionRequest::simpleGet( 'query', [ 'meta' => 'siteinfo', 'siprop' => 'statistics' ] ) )['query']['statistics'];
-        $wdEdits = $wdStatistics['edits'];
-        return $wdEdits;
+        return $wdStatistics['edits'];
     }
 }
