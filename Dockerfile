@@ -1,4 +1,4 @@
-FROM composer:2.5.1 as composer
+FROM composer:2.5.2 as composer
 
 WORKDIR /app/
 COPY composer.* ./
